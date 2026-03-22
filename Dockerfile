@@ -1,9 +1,14 @@
-FROM nginx:alpine
+FROM node:18-alpine
 
-# Copy your static files
-COPY public/ /usr/share/nginx/html
+WORKDIR /app
 
-# Create custom nginx config to listen on port 8080
-RUN echo 'server { listen 8080; server_name localhost; location / { root /usr/share/nginx/html; index index.html; } }' > /etc/nginx/conf.d/default.conf
+# Copy static files
+COPY public/ /app/public
 
+# Install serve
+RUN npm install -g serve
+
+# Run serve on port 8080
 EXPOSE 8080
+
+CMD ["serve", "-s", "public", "-l", "8080"]
